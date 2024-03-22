@@ -26,9 +26,8 @@ const (
 	Add    = "ADD"
 	Remove = "REMOVE"
 
-	TagSelector   = "TAG_SELECTOR"
-	IdSelector    = "ID_SELECTOR"
-	ClassSelector = "CLASS_SELECTOR"
+	IdSelector    = "#"
+	ClassSelector = "."
 
 	Ident = "IDENT"
 )
