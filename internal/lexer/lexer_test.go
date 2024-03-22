@@ -6,7 +6,7 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	input = `
+	input := `
 state clicks = 0;
 
 on click #my-button {
