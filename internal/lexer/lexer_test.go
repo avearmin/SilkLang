@@ -7,7 +7,7 @@ import (
 
 func TestParse(t *testing.T) {
 	input = `
-state clicks = 0
+state clicks = 0;
 
 on click #my-button {
   clicks = clicks + 1;
@@ -25,6 +25,7 @@ on click #my-button {
 		{token.Ident, "clicks"},
 		{token.Assign, "="},
 		{token.Int, "0"},
+		{token.SemiColon, ";"},
 		{token.On, "on"},
 		{token.Click, "click"},
 		{token.IdSelector, "#"},
