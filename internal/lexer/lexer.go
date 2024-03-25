@@ -1,6 +1,9 @@
 package lexer
 
-import "github.com/avearmin/SilkLang/internal/token"
+import (
+	"errors"
+	"github.com/avearmin/SilkLang/internal/token"
+)
 
 type Lexer struct {
 	input   string
@@ -29,10 +32,21 @@ func (l *Lexer) readChar() {
 }
 
 func (l *Lexer) NextToken() token.Token {
-	var tok token.Token
-
 	l.consumeWhitespaces()
 
+	if tok, err := l.createTokenFromSymbol(); err == nil {
+		return tok
+	}
+
+	if tok, err := l.createTokenFromIdentOrNum(); err == nil {
+		return tok
+	}
+
+	return token.New(token.Illegal, l.char)
+}
+
+func (l *Lexer) createTokenFromSymbol() (token.Token, error) {
+	var tok token.Token
 	switch l.char {
 	case '=':
 		tok = token.New(token.Assign, l.char)
@@ -52,22 +66,28 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = ""
 		tok.Type = token.Eof
 	default:
-		if isLetter(l.char) {
-			tok.Literal = l.readIdent()
-			tok.Type = token.LookupIdentType(tok.Literal)
-			return tok
-		} else if isDigit(l.char) {
-			tok.Type = token.Int
-			tok.Literal = l.readNumber()
-			return tok
-		} else {
-			tok = token.New(token.Illegal, l.char)
-			return tok
-		}
+		return token.Token{}, errors.New("char not a symbol")
 	}
 
 	l.readChar()
-	return tok
+
+	return tok, nil
+}
+
+func (l *Lexer) createTokenFromIdentOrNum() (token.Token, error) {
+	var tok token.Token
+
+	if isLetter(l.char) {
+		tok.Literal = l.readIdent()
+		tok.Type = token.LookupIdentType(tok.Literal)
+		return tok, nil
+	} else if isDigit(l.char) {
+		tok.Type = token.Int
+		tok.Literal = l.readNumber()
+		return tok, nil
+	}
+
+	return token.Token{}, errors.New("illegal identifier")
 }
 
 func isLetter(char byte) bool {
