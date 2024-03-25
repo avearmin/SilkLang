@@ -34,7 +34,7 @@ on click #my-button {
 		{token.Ident, "clicks"},
 		{token.Assign, "="},
 		{token.Ident, "clicks"},
-		{token.Add, "+"},
+		{token.Plus, "+"},
 		{token.Int, "1"},
 		{token.SemiColon, ";"},
 		{token.Update, "update"},
